@@ -6,23 +6,19 @@ public class Main {
 
   public static void main(String[] args) {
     // Т.к. чуствую повеселюсь, все делаю в Main, простите :-)
-    int shiftToRight = 66;
+    int shiftToRight = 22;
     String alphabetAllSymbolNormal = "АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ";
     String alphabetAllSymbolShift;
-    String[] alphabet = new String[alphabetAllSymbolNormal.length()];
+    String[] alphabet;
     String[] alphabetShiftToRight = new String[alphabetAllSymbolNormal.length()];
-    String encodedString =
-        "Еъёчхф Вхзёюлх, адздёиу ф ждэщхб, црбх еёдюэчъщъгюъв южаижжзчх, ждчъёнъгжзчдв."
-            + " Ъы зёюивй жёхчгюв бюнс ж ъы вдгивъгзхбсгрв аёхкдв. Зъеъёс вгъ дмъчющгд, мзд гъюэцъьгджзс тздшд "
-            + "аёхкх фчбфъзжф жбъщжзчюъв гъждчъёнъгжзчх мъбдчъмъжадшд югщючющиивх. Ф юэимюб чхни южздёюу ю чгыж"
-            + " юэвъгъгюф, здмгъъ дзёхэюч еджздфггиу юэвъгмючджзс мъбдчъмъжаюк едёдадч. Ю зъв гъ въгъъ,"
-            + " еджбъщдчхбх гъищхмх. Ф еёюнъб а чрчдщи, мзд чюгдя чжъви вдя югзъббъаз, х чдэвдьгд, вды мёъэвъёгдъ"
-            + " жзёъвбъгюъ ад чжъви шхёвдгюмгдви. Гхязю ёънъгюъ вгъ едвдшбх еёдшёхввх югзиюзючгдшд зюех,"
-            + " жеълюхбсгд ждэщхггхф щбф юэимъгюф деёъщъбъггрк жздёдг мъбдчъмъжадя щиню. Въгф вдьгд гхэчхзс"
-            + " дзлдв Вхзёюлр, х ъы, цъэ еёъичъбюмъгюф, вхзъёсу.";
 
-    String[] encodedArray = new String[encodedString.length()];
-    String[] decodedArray = new String[encodedString.length()];
+    //    Оттачивал раскодирование дебагом на кусочке ниже
+    //    String encodedString = "Еъёчхф Вхзёюлх,";
+
+    String encodedString =
+        "Еъёчхф Вхзёюлх, адздёиу ф ждэщхб, црбх еёдюэчъщъгюъв южаижжзчх, ждчъёнъгжзчдв. Ъы зёюивй жёхчгюв бюнс ж ъы вдгивъгзхбсгрв аёхкдв. Зъеъёс вгъ дмъчющгд, мзд гъюэцъьгджзс тздшд аёхкх фчбфъзжф жбъщжзчюъв гъждчъёнъгжзчх мъбдчъмъжадшд югщючющиивх. Ф юэимюб чхни южздёюу ю чгыж юэвъгъгюф, здмгъъ дзёхэюч еджздфггиу юэвъгмючджзс мъбдчъмъжаюк едёдадч. Ю зъв гъ въгъъ, еджбъщдчхбх гъищхмх. Ф еёюнъб а чрчдщи, мзд чюгдя чжъви вдя югзъббъаз, х чдэвдьгд, вды мёъэвъёгдъ жзёъвбъгюъ ад чжъви шхёвдгюмгдви. Гхязю ёънъгюъ вгъ едвдшбх еёдшёхввх югзиюзючгдшд зюех, жеълюхбсгд ждэщхггхф щбф юэимъгюф деёъщъбъггрк жздёдг мъбдчъмъжадя щиню. Въгф вдьгд гхэчхзс дзлдв Вхзёюлр, х ъы, цъэ еёъичъбюмъгюф, вхзъёсу.";
+
+    String[] encodedArray;
 
     StringBuilder builderAlphabetAllSymbolShiftToRight = new StringBuilder();
 
@@ -37,6 +33,28 @@ public class Main {
     alphabetAllSymbolShift =
         builderAppend(builderAlphabetAllSymbolShiftToRight, alphabetShiftToRight).toString();
     System.out.println("Алфавит сдвиг:\t\t\t\t" + alphabetAllSymbolShift);
+
+    encodedArray = stringToArr(encodedString);
+
+    System.out.println(decodeString(alphabet, alphabetShiftToRight, encodedArray));
+  }
+
+  public static String decodeString(String[] arrNormal, String[] arrShift, String[] encodedArray) {
+    StringBuilder returnBuilder = new StringBuilder();
+    StringBuilder indexBuilder = new StringBuilder();
+    for (String symbol : encodedArray) {
+      // Сравниваем с массивом алфавит-сдвиг и если находим, дальше не ищем
+      for (int j = 0; j < arrShift.length; j++) {
+        if (symbol.equalsIgnoreCase(arrShift[j])) {
+          indexBuilder = new StringBuilder(arrNormal[j]);
+          break;
+        } else {
+          indexBuilder = new StringBuilder(symbol);
+        }
+      }
+      returnBuilder.append(indexBuilder.toString());
+    }
+    return returnBuilder.toString();
   }
 
   public static void shiftArrayToRight(int shift, String[] arrNormal, String[] arrToShift) {
